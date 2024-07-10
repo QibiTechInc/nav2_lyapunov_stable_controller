@@ -16,7 +16,7 @@ jobs:
     - name: Setup ROS2 Humble
       uses: ros-tooling/setup-ros@v0.7
       with:
-        version: humble
+        required-ros-distributions: humble
 
     - name: Install bloom
       run: apt-get update && apt-get install -y python3-bloom
@@ -34,7 +34,7 @@ jobs:
     - name: Upload Release Asset
       uses: actions/upload-artifact@v3
       with:
-        name: ros-humble-nav2_lyapunov_stable_controller
+        name: ros-humble-nav2-lyapunov-stable-controller
         path: |
           ../*.deb
 
@@ -46,7 +46,7 @@ jobs:
     - name: Download artifact
       uses: actions/download-artifact@v3
       with:
-        name: ros-humble-nav2_lyapunov_stable_controller
+        name: ros-humble-nav2-lyapunov-stable-controller
 
     - name: Create Release
       id: create_release
@@ -67,5 +67,5 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ../*.deb
-        asset_name: ros-humble-nav2_lyapunov_stable_controller.deb
+        asset_name: ros-humble-nav2-lyapunov-stable-controller.deb
         asset_content_type: application/octet-stream
