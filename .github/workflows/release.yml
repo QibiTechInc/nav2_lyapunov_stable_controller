@@ -19,7 +19,7 @@ jobs:
         required-ros-distributions: humble
 
     - name: Install bloom
-      run: apt-get update && apt-get install -y python3-bloom
+      run: sudo apt-get update && sudo apt-get install -y python3-bloom
 
     - name: Install dependencies
       run: |
