@@ -38,8 +38,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: ros-humble-nav2-lyapunov-stable-controller
-        path: |
-          ../*.deb
+        path: debian/.debhelper/scratch-space/build-ros-humble-nav2-lyapunov-stable-controller/*.deb
 
   release:
     needs: build
