@@ -1,0 +1,71 @@
+name: Generate Debian Package
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Setup ROS2 Humble
+      uses: ros-tooling/setup-ros@v0.2
+      with:
+        version: humble
+
+    - name: Install bloom
+      run: sudo apt-get update && sudo apt-get install -y python3-bloom
+
+    - name: Install dependencies
+      run: |
+        rosdep update
+        rosdep install --from-paths src --ignore-src -r -y
+
+    - name: Build Debian package
+      run: |
+        bloom-generate rosdebian --ros-distro humble
+        fakeroot debian/rules binary
+
+    - name: Upload Release Asset
+      uses: actions/upload-artifact@v3
+      with:
+        name: ros-humble-nav2_lyapunov_stable_controller
+        path: |
+          ../*.deb
+
+  release:
+    needs: build
+    runs-on: ubuntu-22.04
+
+    steps:
+    - name: Download artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: ros-humble-nav2_lyapunov_stable_controller
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.sha }}
+        release_name: Release ${{ github.sha }}
+        body: Automatically generated release from GitHub Actions
+        draft: false
+        prerelease: false
+
+    - name: Upload Release Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ../*.deb
+        asset_name: ros-humble-nav2_lyapunov_stable_controller.deb
+        asset_content_type: application/octet-stream
