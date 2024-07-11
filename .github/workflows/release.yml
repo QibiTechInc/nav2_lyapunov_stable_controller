@@ -35,7 +35,7 @@ jobs:
 
     - name: Verify Debian package
       run: |
-        ls -lh ../*
+        find `pwd`/../*.deb -maxdepth 1
 
     - name: Upload Release Asset
       uses: actions/upload-artifact@v3
