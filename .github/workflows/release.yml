@@ -42,7 +42,7 @@ jobs:
       with:
         name: ros-humble-nav2-lyapunov-stable-controller
         path: |
-          ../*.ddeb
+	  /home/runner/work/nav2_lyapunov_stable_controller/ros-humble-nav2-lyapunov-stable-controller_0.1.0-0jammy_amd64.deb
 
   release:
     needs: build
