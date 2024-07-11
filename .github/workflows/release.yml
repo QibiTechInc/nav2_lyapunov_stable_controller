@@ -33,12 +33,16 @@ jobs:
         bloom-generate rosdebian --ros-distro humble
         fakeroot debian/rules binary
 
+    - name: Verify Debian package
+      run: |
+        ls -lh ../*
+
     - name: Upload Release Asset
       uses: actions/upload-artifact@v3
       with:
         name: ros-humble-nav2-lyapunov-stable-controller
         path: |
-          /home/runner/work/nav2_lyapunov_stable_controller/nav2_lyapunov_stable_controller/*.ddeb
+          ../*.ddeb
 
   release:
     needs: build
